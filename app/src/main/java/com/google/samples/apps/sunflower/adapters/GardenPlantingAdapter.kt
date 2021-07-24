@@ -16,63 +16,50 @@
 
 package com.google.samples.apps.sunflower.adapters
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.google.samples.apps.sunflower.HomeViewPagerFragmentDirections
-import com.google.samples.apps.sunflower.R
+import com.google.samples.apps.sunflower.compose.GardenPlantingItem
+import com.google.samples.apps.sunflower.compose.base.ComposeListAdapter
+import com.google.samples.apps.sunflower.compose.base.ComposeViewHolder
 import com.google.samples.apps.sunflower.data.PlantAndGardenPlantings
-import com.google.samples.apps.sunflower.databinding.ListItemGardenPlantingBinding
 import com.google.samples.apps.sunflower.viewmodels.PlantAndGardenPlantingsViewModel
 
 class GardenPlantingAdapter :
-    ListAdapter<PlantAndGardenPlantings, GardenPlantingAdapter.ViewHolder>(
-        GardenPlantDiffCallback()
+    ComposeListAdapter<PlantAndGardenPlantings, GardenPlantingAdapter.PlantAndGardenViewHolder>(
+        diffCallback
     ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.list_item_garden_planting,
-                parent,
-                false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantAndGardenViewHolder {
+        return PlantAndGardenViewHolder(ComposeView(parent.context))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: PlantAndGardenViewHolder, position: Int) {
+        holder.bindViewHolder(getItem(position))
     }
 
-    class ViewHolder(
-        private val binding: ListItemGardenPlantingBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.setClickListener { view ->
-                binding.viewModel?.plantId?.let { plantId ->
-                    navigateToPlant(plantId, view)
-                }
+    class PlantAndGardenViewHolder(composeView: ComposeView) :
+        ComposeViewHolder<PlantAndGardenPlantings>(composeView) {
+        @ExperimentalAnimationApi
+        @OptIn(ExperimentalMaterialApi::class)
+        @Composable
+        override fun ViewHolder(data: PlantAndGardenPlantings) {
+            val viewModel = PlantAndGardenPlantingsViewModel(data)
+            GardenPlantingItem(viewModel = viewModel) { planId ->
+                val direction = HomeViewPagerFragmentDirections
+                    .actionViewPagerFragmentToPlantDetailFragment(planId)
+                composeView.findNavController().navigate(direction)
             }
         }
+    }
 
-        private fun navigateToPlant(plantId: String, view: View) {
-            val direction = HomeViewPagerFragmentDirections
-                .actionViewPagerFragmentToPlantDetailFragment(plantId)
-            view.findNavController().navigate(direction)
-        }
-
-        fun bind(plantings: PlantAndGardenPlantings) {
-            with(binding) {
-                viewModel = PlantAndGardenPlantingsViewModel(plantings)
-                executePendingBindings()
-            }
-        }
+    companion object {
+        private val diffCallback = GardenPlantDiffCallback()
     }
 }
 
