@@ -16,66 +16,49 @@
 
 package com.google.samples.apps.sunflower.adapters
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.samples.apps.sunflower.HomeViewPagerFragmentDirections
 import com.google.samples.apps.sunflower.PlantListFragment
+import com.google.samples.apps.sunflower.compose.PlanItem
+import com.google.samples.apps.sunflower.compose.base.ComposeListAdapter
+import com.google.samples.apps.sunflower.compose.base.ComposeViewHolder
 import com.google.samples.apps.sunflower.data.Plant
-import com.google.samples.apps.sunflower.databinding.ListItemPlantBinding
 
 /**
  * Adapter for the [RecyclerView] in [PlantListFragment].
  */
-class PlantAdapter : ListAdapter<Plant, RecyclerView.ViewHolder>(PlantDiffCallback()) {
+class PlantAdapter : ComposeListAdapter<Plant, PlantAdapter.PlantViewHolder>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return PlantViewHolder(
-            ListItemPlantBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
+        return PlantViewHolder(ComposeView(parent.context))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val plant = getItem(position)
-        (holder as PlantViewHolder).bind(plant)
+    override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
+        holder.bindViewHolder(getItem(position))
     }
 
-    class PlantViewHolder(
-        private val binding: ListItemPlantBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.setClickListener {
-                binding.plant?.let { plant ->
-                    navigateToPlant(plant, it)
-                }
-            }
-        }
-
-        private fun navigateToPlant(
-            plant: Plant,
-            view: View
-        ) {
-            val direction =
-                HomeViewPagerFragmentDirections.actionViewPagerFragmentToPlantDetailFragment(
-                    plant.plantId
+    class PlantViewHolder(composeView: ComposeView) : ComposeViewHolder<Plant>(composeView) {
+        @OptIn(ExperimentalMaterialApi::class)
+        @Composable
+        override fun ViewHolder(plant: Plant) {
+            PlanItem(plant) {
+                composeView.findNavController().navigate(
+                    HomeViewPagerFragmentDirections.actionViewPagerFragmentToPlantDetailFragment(
+                        it.plantId
+                    )
                 )
-            view.findNavController().navigate(direction)
-        }
-
-        fun bind(item: Plant) {
-            binding.apply {
-                plant = item
-                executePendingBindings()
             }
         }
+    }
+
+    companion object {
+        private val diffCallback = PlantDiffCallback()
     }
 }
 
