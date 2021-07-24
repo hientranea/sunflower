@@ -1,5 +1,15 @@
-Android Sunflower
+Jetpack Compose Challenge with Sunflower
 =================
+
+//----------------------------------------------------------------------//
+**In this branch, I migrated partially Sunflower app  to Jetpack Compose:**
+
+- **Plant list screen**
+- **Plan detail screen**
+- **My garden screen**
+- **Apply new theme on light/dark mode**
+
+//----------------------------------------------------------------------//
 
 A gardening app illustrating Android development best practices with Android Jetpack.
 
