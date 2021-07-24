@@ -2,6 +2,7 @@ Jetpack Compose Challenge with Sunflower
 =================
 
 //----------------------------------------------------------------------//
+
 **In this branch, I migrated partially Sunflower app  to Jetpack Compose:**
 
 - **Plant list screen**
