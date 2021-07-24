@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            android:theme="@style/Theme.Sunflower.AppBarOverlay">
+            android:theme="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout"
@@ -71,11 +71,10 @@
             <!-- Override tabIconTint attribute of style with selector -->
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
-                style="@style/Widget.MaterialComponents.TabLayout.Colored"
+                style="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:tabIconTint="@drawable/tab_icon_color_selector"
-                app:tabTextColor="?attr/colorPrimaryDark"/>
+                />
 
         </com.google.android.material.appbar.AppBarLayout>
 

@@ -19,6 +19,10 @@
     <color name="sunflower_black">#de000000</color>
     <color name="sunflower_gray_50">#fafafa</color>
     <color name="sunflower_gray_50_a600">#99fafafa</color>
+    <color name="sunflower_green_50">#eaf6ef</color>
+    <color name="sunflower_green_100">#c7e6d3</color>
+    <color name="sunflower_green_100_8pc_over_surface">#202221</color>
+    <color name="sunflower_green_200">#81ca9d</color>
     <color name="sunflower_green_300">#6dc790</color>
     <color name="sunflower_green_500">#49bb79</color>
     <color name="sunflower_green_700">#005d2b</color>
